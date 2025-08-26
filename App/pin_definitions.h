@@ -1,0 +1,25 @@
+//
+// Created by Falling_jasmine on 2025/8/22.
+//
+
+#ifndef TWIGO_PIN_DEFINITIONS_H
+#define TWIGO_PIN_DEFINITIONS_H
+#include "stm32f1xx_hal.h"
+#include "tim.h"
+// 电机驱动 TB6612FNG
+#define MOTOR_AIN1_PORT GPIOA
+#define MOTOR_AIN1_PIN  GPIO_PIN_4
+#define MOTOR_AIN2_PORT GPIOA
+#define MOTOR_AIN2_PIN  GPIO_PIN_5
+#define MOTOR_BIN1_PORT GPIOA
+#define MOTOR_BIN1_PIN  GPIO_PIN_6
+#define MOTOR_BIN2_PORT GPIOA
+#define MOTOR_BIN2_PIN  GPIO_PIN_7
+
+
+#define MOTOR_PWM_TIM   &htim1
+#define MOTOR_PWMA_CHAN TIM_CHANNEL_1
+#define MOTOR_PWMB_CHAN TIM_CHANNEL_2
+#define MOTOR_PWM_MAX   100
+
+#endif //TWIGO_PIN_DEFINITIONS_H
