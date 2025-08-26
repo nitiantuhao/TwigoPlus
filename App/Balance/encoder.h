@@ -1,18 +1,18 @@
-#ifndef ENCODER_H
-#define ENCODER_H
+//
+// Created by Falling_jasmine on 2025/8/26.
+//
 
+#ifndef TWIGO_ENCODER_H
+#define TWIGO_ENCODER_H
 #include "stm32f1xx_hal.h"
 
-// 编码器定义
 typedef enum {
-    ENCODER_LEFT = 0,
-    ENCODER_RIGHT,
-    ENCODER_NUM
+  ENCODER_LEFT = 0,
+  ENCODER_RIGHT,
+  ENCODER_NUM
 } Encoder_TypeDef;
 
-// 函数声明
 void Encoder_Init(void);
 int32_t Encoder_Get_Count(Encoder_TypeDef encoder);
 void Encoder_Clear_Count(Encoder_TypeDef encoder);
-
-#endif // ENCODER_H
+#endif //TWIGO_ENCODER_H

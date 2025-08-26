@@ -120,6 +120,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
     Balance_Control();
+    HAL_Delay(1);
   }
   /* USER CODE END 3 */
 }

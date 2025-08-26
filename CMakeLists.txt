@@ -60,7 +60,8 @@ add_executable(${CMAKE_PROJECT_NAME}
         App/Balance/balance_control.c
         App/Balance/balance_control.h
         App/Balance/encoder.c
-        App/Balance/encoder.h)
+        App/Balance/encoder.h
+)
 
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
