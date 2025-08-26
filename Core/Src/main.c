@@ -106,6 +106,7 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   HAL_Delay(20);
+  OLED_Init();
   MPU6050_DMP_init();
   TB6612_Init();
   Balance_Init();

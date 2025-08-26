@@ -46,15 +46,15 @@ float Motor_Start_Threshold(float pwm) {
 // PID参数初始化
 void PID_Init(void) {
     // 平衡PID参数（需根据实际调试调整）
-    balance_pid.kp = 8.0f;    // 比例系数
+    balance_pid.kp = 6.0f;    // 比例系数
     balance_pid.ki = 0.03f;    // 积分系数
     balance_pid.kd = 0.6f;    // 微分系数
-    balance_pid.target = 9.0f; // 目标角度（平衡位置，需校准）
+    balance_pid.target = 8.0f; // 目标角度（平衡位置，需校准）
     balance_pid.error = 0.0f;
     balance_pid.last_err = 0.0f;
     balance_pid.integral = 0.0f;
-    balance_pid.max_out = 80.0f;  // 最大输出（小于PWM_MAX=100）
-    balance_pid.min_out = -80.0f; // 最小输出
+    balance_pid.max_out = 100.0f;  // 最大输出（小于PWM_MAX=100）
+    balance_pid.min_out = -100.0f; // 最小输出
     // 新增参数初始化
     balance_pid.Ts = 0.01f;   // 采样周期（假设MPU中断10ms一次）
     balance_pid.alpha = 0.7f; // 微分滤波系数
