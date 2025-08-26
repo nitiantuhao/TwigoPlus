@@ -17,9 +17,9 @@ int16_t encoder_speed_right = 0;
 
 /* ---------- 宏/常量 ---------- */
 #define MIN_START_PWM  22.0f
-#define SPEED_K        0.08f        // 编码器计数→cm/s 的系数，按轮子/减速比实际标定
+#define SPEED_K        8.18f        // 编码器计数→cm/s 的系数，按轮子/减速比实际标定
 #define SPEED_T        0.001f       // 1 ms
-
+#define SPEED_LPF_ALPHA 0.3f
 /* ---------- 静态变量 ---------- */
 static int32_t last_left  = 0;
 static int32_t last_right = 0;
@@ -42,20 +42,28 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 }
 
 /* TIM3 1 ms 中断：计算速度 */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-    if (htim->Instance == TIM3) {
-        int32_t left  = Encoder_Get_Count(ENCODER_LEFT);
-        int32_t right = Encoder_Get_Count(ENCODER_RIGHT);
+static float speed_lpf = 0.0f;     // 滤波后的速度
 
-        int32_t delta_left  = left  - last_left;
-        int32_t delta_right = right - last_right;
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  if (htim->Instance == TIM3)
+  {
+    /* 1. 读编码器差分 */
+    int32_t left  = Encoder_Get_Count(ENCODER_LEFT);
+    int32_t right = Encoder_Get_Count(ENCODER_RIGHT);
 
-        last_left  = left;
-        last_right = right;
+    int32_t delta_left  = left  - last_left;
+    int32_t delta_right = right - last_right;
 
-        /* 线速度 = 平均轮速 × 系数 / 采样周期 */
-        measured_speed = (float)(delta_left + delta_right) * 0.5f * SPEED_K / SPEED_T;
-    }
+    last_left  = left;
+    last_right = right;
+
+    /* 2. 先算瞬时速度（cm/s） */
+    float raw_speed = (float)(delta_left + delta_right) * 0.5f * SPEED_K / SPEED_T;
+
+    /* 3. 一阶低通滤波 */
+    speed_lpf = SPEED_LPF_ALPHA * speed_lpf + (1.0f - SPEED_LPF_ALPHA) * raw_speed;
+  }
 }
 
 /* ---------- 电机阈值 ---------- */
@@ -85,8 +93,8 @@ void PID_Init(void) {
 
     /* 速度环 */
     speed_pid.kp = 30.0f;               // 先设 20~40，现场调
-    speed_pid.ki = 0.6f;
-    speed_pid.kd = 0.0f;
+    speed_pid.ki = 1.0f;
+    speed_pid.kd = 0.00f;
     speed_pid.target = 0.0f;            // 静止
     speed_pid.error = 0.0f;
     speed_pid.last_err = 0.0f;
@@ -159,7 +167,7 @@ void Balance_Control(void) {
     data_ready = 0;
 
     /* 速度环 → 角度补偿 */
-    float speed_out = PID_Calculate(&speed_pid, measured_speed);
+    float speed_out = PID_Calculate(&speed_pid, speed_lpf);
     balance_pid.target = 8.0f + speed_out;          // 8° 平衡点
 
     /* 角度环 → 电机 PWM */

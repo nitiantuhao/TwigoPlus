@@ -43,7 +43,9 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define LINE_SPEED   15.0f      // cm/s
+#define RUN_TIME_MS  5000       // 5 秒
+#define HALT_TIME_MS 500       // 停 1 秒
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -110,6 +112,7 @@ int main(void)
   MPU6050_DMP_init();
   TB6612_Init();
   Balance_Init();
+  int32_t tick_start;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -119,8 +122,40 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    Balance_Control();
-    HAL_Delay(1);
+    target_speed =  LINE_SPEED;
+    tick_start = HAL_GetTick();
+    while ((HAL_GetTick() - tick_start) < RUN_TIME_MS)
+    {
+      Balance_Control();
+      HAL_Delay(5);
+    }
+
+    /* 2. 停 1 秒 */
+    target_speed = 0.0f;
+    tick_start = HAL_GetTick();
+    while ((HAL_GetTick() - tick_start) < HALT_TIME_MS)
+    {
+      Balance_Control();
+      HAL_Delay(5);
+    }
+
+    /* 3. 向后走 5 秒 */
+    target_speed = -LINE_SPEED;
+    tick_start = HAL_GetTick();
+    while ((HAL_GetTick() - tick_start) < RUN_TIME_MS)
+    {
+      Balance_Control();
+      HAL_Delay(5);
+    }
+
+    /* 4. 再停 1 秒（循环） */
+    target_speed = 0.0f;
+    tick_start = HAL_GetTick();
+    while ((HAL_GetTick() - tick_start) < HALT_TIME_MS)
+    {
+      Balance_Control();
+      HAL_Delay(5);
+    }
   }
   /* USER CODE END 3 */
 }
