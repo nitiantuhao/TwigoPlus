@@ -16,7 +16,7 @@ int16_t encoder_speed_left = 0;
 int16_t encoder_speed_right = 0;
 
 /* ---------- 宏/常量 ---------- */
-#define MIN_START_PWM  1.0f
+#define MIN_START_PWM  10.0f
 #define SPEED_K        8.18f        // 编码器计数→cm/s 的系数，按轮子/减速比实际标定
 #define SPEED_T        0.001f       // 1 ms
 #define SPEED_LPF_ALPHA 0.3f
@@ -79,7 +79,7 @@ void PID_Init(void) {
     balance_pid.kp = 6.0f;
     balance_pid.ki = 0.03f;
     balance_pid.kd = 0.6f;
-    balance_pid.target = 8.0f;          // 机械平衡点
+    balance_pid.target = 0.0f;          // 机械平衡点
     balance_pid.error = 0.0f;
     balance_pid.last_err = 0.0f;
     balance_pid.integral = 0.0f;
@@ -92,15 +92,15 @@ void PID_Init(void) {
     balance_pid.diff_filtered = 0.0f;
 
     /* 速度环 */
-    speed_pid.kp = 20.0f;               // 先设 20~40，现场调
+    speed_pid.kp = 40.0f;               // 先设 20~40，现场调
     speed_pid.ki = 0.05f;
     speed_pid.kd = 0.60f;
     speed_pid.target = 0.0f;            // 静止
     speed_pid.error = 0.0f;
     speed_pid.last_err = 0.0f;
     speed_pid.integral = 0.0f;
-    speed_pid.max_out = 8.0f;           // 输出：角度增量
-    speed_pid.min_out = -8.0f;
+    speed_pid.max_out = 0.0f;           // 输出：角度增量
+    speed_pid.min_out = -0.0f;
     speed_pid.Ts = 0.01f;               // 10 ms
     speed_pid.alpha = 0.0f;
     speed_pid.deadband = 0.2f;
