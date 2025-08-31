@@ -93,7 +93,7 @@ void PID_Init(void) {
 
     /* 速度环 */
     speed_pid.kp = 40.0f;               // 先设 20~40，现场调
-    speed_pid.ki = 0.05f;
+    speed_pid.ki = 0.00f;
     speed_pid.kd = 0.60f;
     speed_pid.target = 0.0f;            // 静止
     speed_pid.error = 0.0f;
