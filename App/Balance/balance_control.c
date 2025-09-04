@@ -95,12 +95,12 @@ void PID_Init(void) {
     speed_pid.kp = 40.0f;               // 先设 20~40，现场调
     speed_pid.ki = 0.00f;
     speed_pid.kd = 0.60f;
-    speed_pid.target = 0.0f;            // 静止
+    speed_pid.target = 4.0f;            // 静止
     speed_pid.error = 0.0f;
     speed_pid.last_err = 0.0f;
     speed_pid.integral = 0.0f;
-    speed_pid.max_out = 4.0f;           // 输出：角度增量
-    speed_pid.min_out = -4.0f;
+    speed_pid.max_out = 20.0f;           // 输出：角度增量
+    speed_pid.min_out = -20.0f;
     speed_pid.Ts = 0.01f;               // 10 ms
     speed_pid.alpha = 0.0f;
     speed_pid.deadband = 0.2f;
