@@ -76,10 +76,10 @@ float Motor_Start_Threshold(float pwm) {
 /* ---------- PID 初始化 ---------- */
 void PID_Init(void) {
     /* 角度环 */
-    balance_pid.kp = 8.0f;
+    balance_pid.kp = 6.0f;
     balance_pid.ki = 0.03f;
     balance_pid.kd = 0.6f;
-    balance_pid.target = 8.0f;          // 机械平衡点
+    balance_pid.target = 4.0f;          // 机械平衡点
     balance_pid.error = 0.0f;
     balance_pid.last_err = 0.0f;
     balance_pid.integral = 0.0f;
@@ -92,15 +92,15 @@ void PID_Init(void) {
     balance_pid.diff_filtered = 0.0f;
 
     /* 速度环 */
-    speed_pid.kp = 49.0f;               // 先设 20~40，现场调
+    speed_pid.kp = 40.0f;               // 先设 20~40，现场调
     speed_pid.ki = 0.03f;
     speed_pid.kd = 0.60f;
     speed_pid.target = 0.0f;            // 静止
     speed_pid.error = 0.0f;
     speed_pid.last_err = 0.0f;
     speed_pid.integral = 0.0f;
-    speed_pid.max_out = 10.0f;           // 输出：角度增量
-    speed_pid.min_out = -10.0f;
+    speed_pid.max_out = 4.0f;           // 输出：角度增量
+    speed_pid.min_out = -4.0f;
     speed_pid.Ts = 0.01f;               // 10 ms
     speed_pid.alpha = 0.0f;
     speed_pid.deadband = 0.2f;
