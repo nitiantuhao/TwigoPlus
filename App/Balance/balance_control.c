@@ -92,9 +92,9 @@ void PID_Init(void) {
     balance_pid.diff_filtered = 0.0f;
 
     /* 速度环 */
-    speed_pid.kp = 40.0f;               // 先设 20~40，现场调
+    speed_pid.kp = 20.0f;               // 先设 20~40，现场调
     speed_pid.ki = 0.00f;
-    speed_pid.kd = 0.60f;
+    speed_pid.kd = 0.00f;
     speed_pid.target = 4.0f;            // 静止
     speed_pid.error = 0.0f;
     speed_pid.last_err = 0.0f;
